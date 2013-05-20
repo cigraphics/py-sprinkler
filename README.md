@@ -1,4 +1,2 @@
-psychic-octo-hipster
+py-sprinkler
 ====================
-
-r
