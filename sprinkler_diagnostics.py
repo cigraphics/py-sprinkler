@@ -22,7 +22,7 @@ def main(args):
 	fileContents.close()
 
 	# Start a sprinkler for 60 seconds, for the provided pin
-	sprinkler.Sprinkler(args[1], configurationFile, 60, [ int(args[2]) ])
+	sprinkler.Sprinkler(configurationFile, 60, [ int(args[2]) ])
 
 # Standard boilerplate to call the main() function to begin
 # the program.
