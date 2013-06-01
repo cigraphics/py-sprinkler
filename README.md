@@ -2,6 +2,17 @@ py-sprinkler
 ====================
 
 
+Required dependencies
+---------------------
+* GPIO -  run it on raspberry
+* pyyaml - parse the configuration file
+
+You can either have them downloaded/installed or use a python package manager (in my case, `pip`):
+> sudo pip install pyyaml
+
+_gpio is bundled in `Raspberry`'s OS (downloaded from their site)._
+
+
 File contents JSON structure
 ----------------------------
 
@@ -29,4 +40,7 @@ File contents JSON structure
 >
 >	}
 >}
+
+Cron job scheduler
+------------------
 

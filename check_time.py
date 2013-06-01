@@ -6,6 +6,8 @@ import sys
 import logging
 import logging.config
 
+import sprinkler
+
 """
 Checks that current system date matches any 
 dates from input file. If so, trigger the 
@@ -53,9 +55,11 @@ class SprinklerTimeCheck:
 			# Check each sprinkler.
 			if (s.canMatchCurrentSecondsPastMidnight(secondsPastMidnight)):
 				# found a match
-				logging.info('Found sprinkler')
+				logging.info('Found sprinkler %d - %d that matches seconds past midnight %d' % (s.start, s.start + s.duration, secondsPastMidnight))
+				_sprinkler = sprinkler.Sprinkler(s.duration, s.pinArray)
+				_sprinkler.operate()
 			else:
-				logging.debug('Sprinkler %d-%d did not match current seconds past midnight %d' % (s.start, s.start + s.duration, secondsPastMidnight))
+				logging.debug('Sprinkler %d - %d did not match current seconds past midnight %d' % (s.start, s.start + s.duration, secondsPastMidnight))
 
 
 
