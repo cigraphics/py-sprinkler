@@ -5,7 +5,7 @@ import threading
 import pickle
 
 #try:
-import RPi
+import RPi.GPIO as GPIO
 #except ImportError:
 #	print("Error importing RPi.GPIO; you are either running the script without sudo priviledges, or running the script on a machine that is not Raspberry (the lib is missing nevertheless)")
 
@@ -41,10 +41,10 @@ class Sprinkler(threading.Thread):
 			self.logMultipleRuns = False			
 
 		# configure gpio mode
-		RPi.GPIO.setmode(RPi.GPIO.BOARD)
+		GPIO.setmode(GPIO.BOARD)
 		for pin in self.pinConfiguration:
 			try:
-				RPi.GPIO.setup(pin, RPi.GPIO.OUT)
+				GPIO.setup(pin, GPIO.OUT)
 			except gpio.InvalidChannelException:
 				logging.error('Unable to configure pin %d', pin)
 
@@ -62,13 +62,13 @@ class Sprinkler(threading.Thread):
 		# Set the pin to high and sleep for given
 		# number of seconds
 		for pin in self.pinConfiguration:
-			RPi.GPIO.output(pin, RPi.GPIO.HIGH)
+			GPIO.output(pin, GPIO.HIGH)
 
 		# sleep
 		time.sleep(self.duration)
 
 		for pin in self.pinConfiguration:
-			RPi.GPIO.output(pin, RPi.GPIO.LOW)
+			GPIO.output(pin, GPIO.LOW)
 
 		logging.info('Finished sprinkler job')
 		self._writePid(0)
