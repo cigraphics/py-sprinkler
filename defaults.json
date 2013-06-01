@@ -1,4 +1,5 @@
 {
+	"configurationFile": "configuration.yaml",
 	"default": {
 
 		"schedules": [
