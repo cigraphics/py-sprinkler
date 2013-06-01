@@ -43,4 +43,7 @@ File contents JSON structure
 
 Cron job scheduler
 ------------------
+You need to added the following configuration to cron, in order to root users `crontab`:
+`*/5 * * * * python /home/pi/sprinkler/check_time.py /home/pi/sprinkler/defaults.json`
 
+Of course, arguments can be changed accordingly (the script above will check every 5 minutes of every hour, and locate the sprinkler's check_time.py in user's home directory).

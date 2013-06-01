@@ -1,0 +1,4 @@
+
+# The default configuration uses /tmp file to store
+# its pid. 
+pidFile: '/tmp/sprinkler.pid'

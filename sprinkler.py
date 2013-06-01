@@ -1,31 +1,28 @@
 import logging
 import time
 import yaml
+import threading
+import pickle
 
-try:
-	import RPi.GPIO as gpio
-except ImportError:
-	print("Error importing RPi.GPIO; you are either running the script without sudo priviledges, or running the script on a machine that is not Raspberry (the lib is missing nevertheless)")
+#try:
+import RPi
+#except ImportError:
+#	print("Error importing RPi.GPIO; you are either running the script without sudo priviledges, or running the script on a machine that is not Raspberry (the lib is missing nevertheless)")
 
 """
 Runner for sprinklers.
 """
-class Sprinkler:
-	defaultConfigurationFile = 'configuration.yaml'
-
-	"""
-	Delegates to the second constructor with default 
-	configuration.
-	"""
-	def __init__(self):
-		self.__init__(defaultConfigurationFile)
+class Sprinkler(threading.Thread):
 
 	def __init__(self, configurationFile, duration, pinConfiguration):
+
+		super(Sprinkler, self).__init__()
 		self.configurationFile = configurationFile
 		self.duration = duration
 		self.pinConfiguration = pinConfiguration
 
 		self._setup()
+		self.daemon = True
 
 	def _setup(self):
 		# Read configuration file. We're interested in
@@ -34,44 +31,60 @@ class Sprinkler:
 		_map = yaml.safe_load(_config)
 		_config.close()
 
-		self.pinFile = _map["configFile"]
-		self.logMultipleRuns = _map["logMultipleRuns"]
-		if (self.pidFile is None):
+		try:
+			self.pidFile = _map["pidFile"]
+		except KeyError:
 			raise "Missing pidFile in configuration"
-		if (self.logMultipleRuns is None):
-			self.logMultipleRuns = False
+		try:
+			self.logMultipleRuns = _map["logMultipleRuns"]
+		except KeyError:
+			self.logMultipleRuns = False			
 
 		# configure gpio mode
-		gpio.setmode(gpio.BOARD)
+		RPi.GPIO.setmode(RPi.GPIO.BOARD)
 		for pin in self.pinConfiguration:
 			try:
-				gpio.setup(pin, gpio.OUT)
+				RPi.GPIO.setup(pin, RPi.GPIO.OUT)
 			except gpio.InvalidChannelException:
 				logging.error('Unable to configure pin %d', pin)
 
-	def operate(self):
+	def run(self):
 		# Read the pid file. The sprinkler will only
 		# run if it not currently running.
-		_f = open(self.pidFile)
-		_isRunning = int(_f.read())
-		if (_isRunning is True):
+		_isRunning = self._readPid()
+		if (_isRunning is 1):
 			logging.warn('Sprinkler is already running.')
 			return
 		else:
-			_f.write("1")
-		_f.close()
+			logging.debug('Write pidFile with 1')
+			self._writePid(1)
 
 		# Set the pin to high and sleep for given
 		# number of seconds
 		for pin in self.pinConfiguration:
-			gpio.output(pin, gpio.HIGH)
+			RPi.GPIO.output(pin, RPi.GPIO.HIGH)
 
 		# sleep
 		time.sleep(self.duration)
 
 		for pin in self.pinConfiguration:
-			gpio.output(pin, gpio.LOW)
+			RPi.GPIO.output(pin, RPi.GPIO.LOW)
 
-		_f = open(self.pidFile)
-		_f.write("0")
+		logging.info('Finished sprinkler job')
+		self._writePid(0)
+
+	def _readPid(self):
+		try:
+			_f = open(self.pidFile)
+			pid = pickle.load(_f)
+			_f.close()
+			return pid
+		except IOError:
+			# File does not exist yet, so we have no pid
+			return 0
+
+
+	def _writePid(self, isRunning):
+		_f = open(self.pidFile, "w")
+		pickle.dump(isRunning, _f)
 		_f.close()
