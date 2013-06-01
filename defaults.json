@@ -1,0 +1,13 @@
+{
+	"default": {
+
+		"schedules": [
+			{ 
+				"pinNumbers": [17], 
+				"start": 21600,
+				"duration": 600
+			}
+
+		]
+	}
+}
