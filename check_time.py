@@ -60,7 +60,7 @@ class SprinklerTimeCheck:
 				# found a match
 				logging.info('Found sprinkler %d - %d that matches seconds past midnight %d' % (s.start, s.start + s.duration, secondsPastMidnight))
 				_sprinkler = sprinkler.Sprinkler(self.configurationFile, s.duration, s.pinsArray)
-				_sprinkler.operate()
+				_sprinkler.start()
 			else:
 				logging.debug('Sprinkler %d - %d did not match current seconds past midnight %d' % (s.start, s.start + s.duration, secondsPastMidnight))
 
