@@ -18,6 +18,10 @@ File contents JSON structure
 
 ```javascript
 {
+  // Configuration file - mainly the place to specify pid,
+  // but other runtime arguments could be placed here.
+  configurationFile: 'configuration.yaml'
+
   // The default sprinkler fallback schedule,
   // if no day / month matches.
   default: {

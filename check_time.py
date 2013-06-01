@@ -29,6 +29,9 @@ class SprinklerTimeCheck:
 
 
 	def _readSchedules(self, json):
+		# Read configuration file
+		self.configurationFile = json["configurationFile"]
+
 		# Read the default configuration
 		default = json["default"]
 
@@ -56,7 +59,7 @@ class SprinklerTimeCheck:
 			if (s.canMatchCurrentSecondsPastMidnight(secondsPastMidnight)):
 				# found a match
 				logging.info('Found sprinkler %d - %d that matches seconds past midnight %d' % (s.start, s.start + s.duration, secondsPastMidnight))
-				_sprinkler = sprinkler.Sprinkler(s.duration, s.pinArray)
+				_sprinkler = sprinkler.Sprinkler(self.configurationFile, s.duration, s.pinArray)
 				_sprinkler.operate()
 			else:
 				logging.debug('Sprinkler %d - %d did not match current seconds past midnight %d' % (s.start, s.start + s.duration, secondsPastMidnight))
