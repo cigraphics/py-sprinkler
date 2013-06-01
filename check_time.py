@@ -84,9 +84,9 @@ def main(args):
 		sys.exit(2)
 
 	# Configure logger
-	logging.config.fileConfig('logger.conf')
+	logging.config.fileConfig(args[0])
 
-	SprinklerTimeCheck(args[0])
+	SprinklerTimeCheck(args[1])
 
 # Standard boilerplate to call the main() function to begin
 # the program.
