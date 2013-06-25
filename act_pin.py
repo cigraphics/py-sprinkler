@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import sys
 
 """
 	A simple python script that will simply active a digital pin on the raspberry.
