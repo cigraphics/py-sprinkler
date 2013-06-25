@@ -23,11 +23,16 @@ def main(args):
 	GPIO.output(pin, GPIO.HIGH)
 
 	# sleep
-	time.sleep(60)
-	GPIO.output(pin, GPIO.LOW)
+	try
+	
+		time.sleep(60)
+		GPIO.output(pin, GPIO.LOW)
+		# Cleanup the GPIO at the end of script.
+		GPIO.cleanup()
 
-	# Cleanup the GPIO at the end of script.
-	GPIO.cleanup()
+	except KeyboardInterrupt:
+		GPIO.output(pin, GPIO.LOW)
+		GPIO.cleanup()
 
 # Standard boilerplate to call the main() function to begin the program.
 if __name__ == '__main__':
