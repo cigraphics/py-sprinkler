@@ -44,7 +44,9 @@ class Sprinkler(threading.Thread):
 		GPIO.setmode(GPIO.BOARD)
 		for pin in self.pinConfiguration:
 			try:
+				logging.debug('Setting pin %d to OUT', pin)
 				GPIO.setup(pin, GPIO.OUT)
+				logger.info('Successfully setup pi %d to OUT', pin)
 			except GPIO.InvalidChannelException:
 				logging.error('Unable to configure pin %d', pin)
 
