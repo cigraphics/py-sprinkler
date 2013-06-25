@@ -23,8 +23,8 @@ def main(args):
 	GPIO.output(pin, GPIO.HIGH)
 
 	# sleep
-	try
-	
+	try:
+
 		time.sleep(60)
 		GPIO.output(pin, GPIO.LOW)
 		# Cleanup the GPIO at the end of script.
